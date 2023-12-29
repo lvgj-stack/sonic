@@ -33,6 +33,8 @@ func (p *PasteHandler) Get(ctx *gin.Context) {
 			ctx.String(http.StatusNotFound, err.Error())
 		} else if errorType == xerr.Forbidden {
 			ctx.String(http.StatusForbidden, err.Error())
+		} else {
+			ctx.String(http.StatusInternalServerError, "InternalServerError")
 		}
 	}
 	ctx.String(http.StatusOK, content)

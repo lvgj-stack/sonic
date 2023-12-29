@@ -22,7 +22,7 @@ func (p *pasteServiceImpl) Get(ctx context.Context, key, username, password stri
 	permanentPaste := dal.GetQueryByCtx(ctx).Permanent
 	paste, err := permanentPaste.WithContext(ctx).
 		Where(permanentPaste.Key.Eq(key)).Take()
-	if paste.Password != nil {
+	if paste != nil && paste.Password != nil {
 		if *paste.Password != util.Md5Hex(password) {
 			return "", xerr.Forbidden.New("failed to validate password")
 		}
@@ -38,16 +38,15 @@ func (p *pasteServiceImpl) Create(ctx context.Context, paste param.Paste) (any, 
 	if key == "" {
 		key = util.Generator(8, false, &paste)
 	}
-	if paste.Password != "" {
-		paste.Password = util.Md5Hex(paste.Password)
-	}
 	permanent := &entity.Permanent{
 		Key:      key,
 		Lang:     paste.Lang,
 		Content:  paste.Content,
-		Password: &paste.Password,
 		Username: &paste.Username,
 		ClientIP: paste.ClientIP,
+	}
+	if paste.Password != "" {
+		*permanent.Password = util.Md5Hex(paste.Password)
 	}
 	permanentPaste := dal.GetQueryByCtx(ctx).Permanent
 	if err := permanentPaste.WithContext(ctx).Create(permanent); err != nil {

@@ -349,6 +349,7 @@ func (s *Server) RegisterRouters() {
 		}
 		{
 			pasteAPIRouter := router.Group("/api/paste")
+			pasteAPIRouter.Use(s.LogMiddleware.LoggerWithConfig(middleware.GinLoggerConfig{}), s.RecoveryMiddleware.RecoveryWithLogger())
 			pasteAPIRouter.GET("/:key", s.rawWrapHandler(s.PasteAPIHandler.Get))
 			pasteAPIRouter.POST("", s.wrapHandler(s.PasteAPIHandler.Create))
 		}
