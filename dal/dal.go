@@ -95,7 +95,8 @@ func dbMigrate() {
 	})
 	err := db.AutoMigrate(&entity.Attachment{}, &entity.Category{}, &entity.Comment{}, &entity.CommentBlack{}, &entity.Journal{},
 		&entity.Link{}, &entity.Log{}, &entity.Menu{}, &entity.Meta{}, &entity.Option{}, &entity.Photo{}, &entity.Post{},
-		&entity.PostCategory{}, &entity.PostTag{}, &entity.Tag{}, &entity.ThemeSetting{}, &entity.User{})
+		&entity.PostCategory{}, &entity.PostTag{}, &entity.Tag{}, &entity.ThemeSetting{}, &entity.User{}, &entity.FlywaySchemaHistory{},
+		&entity.Permanent{}, &entity.Temporary{})
 	if err != nil {
 		sonicLog.Fatal("failed auto migrate db", zap.Error(err))
 	}

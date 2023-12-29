@@ -12,7 +12,7 @@ const TableNameFlywaySchemaHistory = "flyway_schema_history"
 
 // FlywaySchemaHistory mapped from table <flyway_schema_history>
 type FlywaySchemaHistory struct {
-	InstalledRank int32     `gorm:"column:installed_rank;type:int;primaryKey" json:"installed_rank"`
+	InstalledRank int32     `gorm:"column:installed_rank;type:int;primaryKey;autoIncrement:true" json:"installed_rank"`
 	Version       *string   `gorm:"column:version;type:varchar(50)" json:"version"`
 	Description   string    `gorm:"column:description;type:varchar(200);not null" json:"description"`
 	Type          string    `gorm:"column:type;type:varchar(20);not null" json:"type"`

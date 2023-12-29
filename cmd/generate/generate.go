@@ -57,6 +57,8 @@ func main() {
 		g.GenerateModel("tag"),
 		g.GenerateModel("theme_setting"),
 		g.GenerateModel("user", gen.FieldType("mfa_type", "consts.MFAType")),
+		g.GenerateModel("temporary"),
+		g.GenerateModel("permanent"),
 	)
 
 	// apply diy interfaces on structs or table models

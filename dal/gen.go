@@ -8,8 +8,10 @@ import (
 	"context"
 	"database/sql"
 
-	"gorm.io/gen"
 	"gorm.io/gorm"
+
+	"gorm.io/gen"
+
 	"gorm.io/plugin/dbresolver"
 )
 
@@ -26,11 +28,13 @@ var (
 	Menu                *menu
 	Meta                *meta
 	Option              *option
+	Permanent           *permanent
 	Photo               *photo
 	Post                *post
 	PostCategory        *postCategory
 	PostTag             *postTag
 	Tag                 *tag
+	Temporary           *temporary
 	ThemeSetting        *themeSetting
 	User                *user
 )
@@ -48,11 +52,13 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	Menu = &Q.Menu
 	Meta = &Q.Meta
 	Option = &Q.Option
+	Permanent = &Q.Permanent
 	Photo = &Q.Photo
 	Post = &Q.Post
 	PostCategory = &Q.PostCategory
 	PostTag = &Q.PostTag
 	Tag = &Q.Tag
+	Temporary = &Q.Temporary
 	ThemeSetting = &Q.ThemeSetting
 	User = &Q.User
 }
@@ -71,11 +77,13 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		Menu:                newMenu(db, opts...),
 		Meta:                newMeta(db, opts...),
 		Option:              newOption(db, opts...),
+		Permanent:           newPermanent(db, opts...),
 		Photo:               newPhoto(db, opts...),
 		Post:                newPost(db, opts...),
 		PostCategory:        newPostCategory(db, opts...),
 		PostTag:             newPostTag(db, opts...),
 		Tag:                 newTag(db, opts...),
+		Temporary:           newTemporary(db, opts...),
 		ThemeSetting:        newThemeSetting(db, opts...),
 		User:                newUser(db, opts...),
 	}
@@ -95,11 +103,13 @@ type Query struct {
 	Menu                menu
 	Meta                meta
 	Option              option
+	Permanent           permanent
 	Photo               photo
 	Post                post
 	PostCategory        postCategory
 	PostTag             postTag
 	Tag                 tag
+	Temporary           temporary
 	ThemeSetting        themeSetting
 	User                user
 }
@@ -120,11 +130,13 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		Menu:                q.Menu.clone(db),
 		Meta:                q.Meta.clone(db),
 		Option:              q.Option.clone(db),
+		Permanent:           q.Permanent.clone(db),
 		Photo:               q.Photo.clone(db),
 		Post:                q.Post.clone(db),
 		PostCategory:        q.PostCategory.clone(db),
 		PostTag:             q.PostTag.clone(db),
 		Tag:                 q.Tag.clone(db),
+		Temporary:           q.Temporary.clone(db),
 		ThemeSetting:        q.ThemeSetting.clone(db),
 		User:                q.User.clone(db),
 	}
@@ -152,11 +164,13 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		Menu:                q.Menu.replaceDB(db),
 		Meta:                q.Meta.replaceDB(db),
 		Option:              q.Option.replaceDB(db),
+		Permanent:           q.Permanent.replaceDB(db),
 		Photo:               q.Photo.replaceDB(db),
 		Post:                q.Post.replaceDB(db),
 		PostCategory:        q.PostCategory.replaceDB(db),
 		PostTag:             q.PostTag.replaceDB(db),
 		Tag:                 q.Tag.replaceDB(db),
+		Temporary:           q.Temporary.replaceDB(db),
 		ThemeSetting:        q.ThemeSetting.replaceDB(db),
 		User:                q.User.replaceDB(db),
 	}
@@ -174,11 +188,13 @@ type queryCtx struct {
 	Menu                *menuDo
 	Meta                *metaDo
 	Option              *optionDo
+	Permanent           *permanentDo
 	Photo               *photoDo
 	Post                *postDo
 	PostCategory        *postCategoryDo
 	PostTag             *postTagDo
 	Tag                 *tagDo
+	Temporary           *temporaryDo
 	ThemeSetting        *themeSettingDo
 	User                *userDo
 }
@@ -196,11 +212,13 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		Menu:                q.Menu.WithContext(ctx),
 		Meta:                q.Meta.WithContext(ctx),
 		Option:              q.Option.WithContext(ctx),
+		Permanent:           q.Permanent.WithContext(ctx),
 		Photo:               q.Photo.WithContext(ctx),
 		Post:                q.Post.WithContext(ctx),
 		PostCategory:        q.PostCategory.WithContext(ctx),
 		PostTag:             q.PostTag.WithContext(ctx),
 		Tag:                 q.Tag.WithContext(ctx),
+		Temporary:           q.Temporary.WithContext(ctx),
 		ThemeSetting:        q.ThemeSetting.WithContext(ctx),
 		User:                q.User.WithContext(ctx),
 	}

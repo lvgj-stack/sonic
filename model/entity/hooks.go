@@ -211,3 +211,14 @@ func (m *Meta) BeforeUpdate(tx *gorm.DB) (err error) {
 	tx.Statement.SetColumn("update_time", time.Now())
 	return nil
 }
+
+// ----------------------- Meta ---------------------
+
+func (m *Permanent) BeforeCreate(tx *gorm.DB) (err error) {
+	m.CreatedAt = time.Now()
+	return nil
+}
+
+func (m *Permanent) BeforeUpdate(tx *gorm.DB) (err error) {
+	return nil
+}

@@ -347,6 +347,11 @@ func (s *Server) RegisterRouters() {
 
 			contentAPIRouter.GET("/options/comment", s.wrapHandler(s.ContentAPIOptionHandler.Comment))
 		}
+		{
+			pasteAPIRouter := router.Group("/api/paste")
+			pasteAPIRouter.GET("/:key", s.rawWrapHandler(s.PasteAPIHandler.Get))
+			pasteAPIRouter.POST("", s.wrapHandler(s.PasteAPIHandler.Create))
+		}
 	}
 }
 

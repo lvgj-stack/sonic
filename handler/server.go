@@ -77,6 +77,7 @@ type Server struct {
 	ContentAPISheetHandler    *api.SheetHandler
 	ContentAPIOptionHandler   *api.OptionHandler
 	ContentAPIPhotoHandler    *api.PhotoHandler
+	PasteAPIHandler           *api.PasteHandler
 }
 
 type ServerParams struct {
@@ -132,6 +133,7 @@ type ServerParams struct {
 	ContentAPISheetHandler    *api.SheetHandler
 	ContentAPIOptionHandler   *api.OptionHandler
 	ContentAPIPhotoHandler    *api.PhotoHandler
+	PasteAPIHandler           *api.PasteHandler
 }
 
 func NewServer(param ServerParams, lifecycle fx.Lifecycle) *Server {
@@ -197,6 +199,7 @@ func NewServer(param ServerParams, lifecycle fx.Lifecycle) *Server {
 		ContentAPIOptionHandler:   param.ContentAPIOptionHandler,
 		ContentSearchHandler:      param.ContentSearchHandler,
 		ContentAPIPhotoHandler:    param.ContentAPIPhotoHandler,
+		PasteAPIHandler:           param.PasteAPIHandler,
 	}
 	lifecycle.Append(fx.Hook{
 		OnStop:  httpServer.Shutdown,
@@ -311,5 +314,11 @@ func (s *Server) handleError(ctx *gin.Context, err error) {
 	err = s.Template.ExecuteTemplate(ctx.Writer, templateName, model)
 	if err != nil {
 		s.logger.Error("render error template err", zap.Error(err))
+	}
+}
+
+func (s *Server) rawWrapHandler(handler func(c *gin.Context)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		handler(ctx)
 	}
 }
