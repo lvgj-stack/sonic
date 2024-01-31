@@ -46,7 +46,8 @@ func (p *pasteServiceImpl) Create(ctx context.Context, paste param.Paste) (any, 
 		ClientIP: paste.ClientIP,
 	}
 	if paste.Password != "" {
-		*permanent.Password = util.Md5Hex(paste.Password)
+		password := util.Md5Hex(paste.Password)
+		permanent.Password = &password
 	}
 	permanentPaste := dal.GetQueryByCtx(ctx).Permanent
 	if err := permanentPaste.WithContext(ctx).Create(permanent); err != nil {
