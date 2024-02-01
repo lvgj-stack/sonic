@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 
+	"github.com/go-sonic/sonic/log"
 	"github.com/go-sonic/sonic/model/param"
 	"github.com/go-sonic/sonic/service"
 	"github.com/go-sonic/sonic/util/xerr"
@@ -52,4 +54,18 @@ func (p *PasteHandler) Create(ctx *gin.Context) (any, error) {
 		return nil, xerr.WithStatus(err, xerr.StatusInternalServerError).WithMsg("create error")
 	}
 	return key, nil
+}
+
+func (p *PasteHandler) Update(ctx *gin.Context) (any, error) {
+	para := param.Paste{}
+	err := ctx.ShouldBindJSON(&para)
+	if err != nil {
+		return nil, xerr.WithStatus(err, xerr.StatusBadRequest).WithMsg("parameter error")
+	}
+	err = p.PasteService.Update(ctx, para)
+	if err != nil {
+		log.CtxError(ctx, "update permanent paste error", zap.Error(err))
+		return nil, err
+	}
+	return nil, nil
 }

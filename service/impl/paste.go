@@ -55,3 +55,23 @@ func (p *pasteServiceImpl) Create(ctx context.Context, paste param.Paste) (any, 
 	}
 	return permanent, nil
 }
+
+func (p *pasteServiceImpl) Update(ctx context.Context, paste param.Paste) error {
+	key := paste.Key
+	password := ""
+	if paste.Password != "" {
+		password = util.Md5Hex(paste.Password)
+	}
+	permanentPaste := dal.GetQueryByCtx(ctx).Permanent
+	updateResult, err := permanentPaste.WithContext(ctx).
+		Where(permanentPaste.Key.Eq(key), permanentPaste.Password.Eq(password)).
+		UpdateSimple(permanentPaste.Content.Value(paste.Content))
+
+	if err != nil {
+		return WrapDBErr(err)
+	}
+	if updateResult.RowsAffected != 1 {
+		return xerr.NoType.New("update permanent failed").WithMsg("update permanent failed").WithStatus(xerr.StatusInternalServerError)
+	}
+	return nil
+}
